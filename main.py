@@ -43,16 +43,27 @@ def get_input():
 # need to correct yellow markings: if yellow letter is solved, and there is not a duplicate, mark white
 def process_guess(game_round, guess):
     board = []
+
+    yellows = set()
     for i in range(5):
         c = guess[i]
         a = answer[i]
+        # green
         if c == a:
             board.append((c, 2))
+        # yellow
         elif c in answer:
-            board.append((c, 1))
+            if c not in yellows:
+                board.append((c, 1))
+                yellows.add(c)
+            else:
+                board.append((c, 0))
+        # white
         else:
             board.append((c, 0))
     boards[game_round - 1] = board
+
+    return guess == answer
 
 
 def play_game():
@@ -66,5 +77,5 @@ def play_game():
 
 
 play_game()
-print_board(4)
-print(answer)
+print_board("Over!")
+print("The word was " + answer)
